@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /*
-LootStats.sol
+LootBagClassification.sol
 Lootverse Utility contract to gather stats for Loot (For Adventurers) Bags, Genesis Adventurers and other "bag" like contracts.
 
 See OG Loot Contract for lists of all possible items.
@@ -20,14 +20,14 @@ All functions are made public incase they are useful but the expected use is thr
 
 Each of these take a Loot Bag ID.  This contract relies and stores the most current LootClassification contract.
 
-The LootStats(_TBD_) contract can be used to get "bag" level stats for Loot bag's tokenID.
+The LootBagClassification(_TBD_) contract can be used to get "bag" level stats for Loot bag's tokenID.
 
 So a typical use might be:
 
 // get stats for loot bag# 1234
 {
-    LootStats stats = 
-        LootStats(_TBD_);
+    LootBagClassification stats = 
+        LootBagClassification(_TBD_);
 
     uint256 level = stats.getLevel(1234);
     uint256 greatness = stats.getGreatness(1234);
@@ -54,7 +54,7 @@ interface ILootClassification {
     function getRating(Type lootType, uint256 tokenId) external pure returns (uint256);
 }
 
-contract LootStats is Ownable
+contract LootBagClassification is Ownable
 {
     ILootClassification private lootClassification;    
     address public lootClassificationAddress;
