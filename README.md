@@ -1,10 +1,12 @@
 # LootBagClassification.sol
 
-This is a Lootverse utility contract to classify Loot (For Adventurers) Bags.
+This is a Lootverse utility contract to classify Loot (For Adventurers) Bags, mLoot and Genesis Adventurers.
 
 See the [original Loot Contract](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7) for lists of all possible items.
 
 See [loot.foundation](https://loot.foundation/) for an explanation of the classifications used.
+
+The contract relies on the [LootClassification](https://github.com/playmint/loot-classification) contract. To make an update to those functions make a PR on that project.
 
 
 ## Intended Use
@@ -21,60 +23,44 @@ If new functionality is required,
 2. Deploy the contract to mainnet to work with your project.
 3. Make another PR to this repository with the deploy address added to the table below.
 
-In future, this code could be modified to be an upgradeable contract so that existing contracts can receive updates when the lore is updated. At this point some consideration will need to be made to avoid making breaking changes.
+In the future, this code could be modified to be an upgradeable contract so that existing contracts can receive updates when the lore is updated. At this point some consideration will need to be made to avoid making breaking changes.
 
 ## Authorised Updates
 
-Updates to this contract can be discussed in this GitHub repo and/or in the Loot Builders discord https://discord.gg/5HApxRqbAW
+Updates to this contract can be discussed in this GitHub repo and/or in the Genesis Project discord https://discord.gg/QzvW2WJqed
 
 In future ownership of this repository and the latest deployed contract should be transferred to a Loot DAO.
 
 
 ## How to Use
 
-All functions are made public incase they are useful but the expected use is through the main
-3 classification functions:
-- getRank()
-- getClass()
-- getMaterial()
-
-and 3 stats functions:
+There are 3 primary stat functions:
 - getLevel()
 - getGreatness()
 - getRating()
 
-Each of these take an item 'Type' (weapon, chest, head etc.) 
-and an index into the list of all possible items of that type as found in the OG Loot contract.
-
-The [LootComponents contract](https://etherscan.io/address/0x3eb43b1545a360d1D065CB7539339363dFD445F3#code) can be used to get item indexes from Loot bag tokenIDs.
-The code from LootComponents is also copied into this contract and rewritten for gas efficiency, which may be preferable to use if the classification functions are required in a transaction call.
+These can take either a tokenId (both Loot tokenIds and mLoot tokenIds will work).  If you are trying to get classifications for Genesis Adventurers, you will need to pass in an array for uint256 with every items original lootbag ID.
 
 So a typical use in your own lootverse Solidity contract might be:
 ```
 // instantiate contract object
-LootClassification classification = 
-    LootClassification(0xC6Df003DC044582A45e712BA219719410013ad63);
+LootBagClassification stats = 
+    LootBagClassification(_TBD_);
+  
+//for greatness, level, and rating for a loot or mloot bag
+uint256 level = stats.getLevel(1234);
+uint256 greatness = stats.getGreatness(1234);
+uint256 rating = stats.getRating(1234);
 
-// get component array for loot bag# 1234
-uint256[5] memory weaponComponents = classification.weaponComponents(1234);
-
-// get weapon index as first element of component array (we're ignoring suffixes and prefixes here)
-uint256 index = weaponComponents[0];
-
-// class, material and rank can now all be derived from the index for Type Weapon
-LootClassification.Class class = classification.getClass(LootClassification.Type.Weapon, index);
-LootClassification.Material material = classification.getMaterial( LootClassification.Type.Weapon, index);
-uint256 rank = classification.getRank( LootClassification.Type.Weapon, index);
-
-// greatness, level, and rating can be all derived from just tokenId
-uint256 level = classification.getLevel(itemType, 1234);
-uint256 greatness = classification.getGreatness(itemType, 1234);
-uint256 rating = classification.getRating(itemType, 1234);
+//for greatness, level, and rating for a genesis adventurer bag.  if a genesis adventurer contains a "lost item" pass a tokenId of 0.
+tokenIds = [980, 1631, 1381, 6322, 3555, 5448, 3390, 223];
+uint256 level = stats.getLevel(tokenIds);
+uint256 greatness = stats.getGreatness(tokenIds);
+uint256 rating = stats.getRating(tokenIds);
 ```
 
 ## Deploy History
 
 | Project | Commit | Deployed address link |
 |---------|---------------------|-----------------------|
-| The Crypt: Chapter one | [a254244aaebdbe8ca5e4b2e28fc9138cfa529f51](https://github.com/playmint/loot-classification/tree/a254244aaebdbe8ca5e4b2e28fc9138cfa529f51)| [0xC6Df003DC044582A45e712BA219719410013ad63](https://etherscan.io/address/0xC6Df003DC044582A45e712BA219719410013ad63) |
 
