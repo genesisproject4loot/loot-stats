@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /*
-LootBagClassification.sol
+LootStatsV1.sol
 Lootverse Utility contract to gather stats for Loot (For Adventurers) Bags, Genesis Adventurers and other "bag" like contracts.
 
 See OG Loot Contract for lists of all possible items.
@@ -20,14 +22,14 @@ All functions are made public incase they are useful but the expected use is thr
 
 Each of these take a Loot Bag ID.  This contract relies and stores the most current LootClassification contract.
 
-The LootBagClassification(_TBD_) contract can be used to get "bag" level stats for Loot bag's tokenID.
+The LootStatsV1(_TBD_) contract can be used to get "bag" level stats for Loot bag's tokenID.
 
 So a typical use might be:
 
 // get stats for loot bag# 1234
 {
-    LootBagClassification stats = 
-        LootBagClassification(_TBD_);
+    LootStats stats = 
+        LootStatsV1(_TBD_);
 
     uint256 level = stats.getLevel(1234);
     uint256 greatness = stats.getGreatness(1234);
@@ -54,16 +56,22 @@ interface ILootClassification {
     function getRating(Type lootType, uint256 tokenId) external pure returns (uint256);
 }
 
-contract LootBagClassification is Ownable
-{
+contract LootStatsV1 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     ILootClassification private lootClassification;    
     address public lootClassificationAddress;
-    ILootClassification.Type[8] private itemTypes = [ILootClassification.Type.Weapon, ILootClassification.Type.Chest, ILootClassification.Type.Head, ILootClassification.Type.Waist, ILootClassification.Type.Foot, ILootClassification.Type.Hand, ILootClassification.Type.Neck, ILootClassification.Type.Ring];
+    ILootClassification.Type[8] private itemTypes;
 
-    constructor(address lootClassification_) {
+    function initialize(address lootClassification_) initializer public {
+        __Ownable_init();
+        __UUPSUpgradeable_init();
+
+        itemTypes = [ILootClassification.Type.Weapon, ILootClassification.Type.Chest, ILootClassification.Type.Head, ILootClassification.Type.Waist, ILootClassification.Type.Foot, ILootClassification.Type.Hand, ILootClassification.Type.Neck, ILootClassification.Type.Ring];
         lootClassificationAddress = lootClassification_;
         lootClassification = ILootClassification(lootClassificationAddress);
+
     }
+
+    function _authorizeUpgrade(address) internal override onlyOwner {}
 
     function setLootClassification(address lootClassification_) public onlyOwner {
         lootClassificationAddress = lootClassification_;
