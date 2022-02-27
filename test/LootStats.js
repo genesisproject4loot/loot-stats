@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { ethers, upgrades } = require("hardhat");
+const { ethers } = require("hardhat");
 
 describe("LootStats", function () {
   // eslint-disable-next-line no-unused-vars
@@ -14,12 +14,8 @@ describe("LootStats", function () {
     );
     lootClassification = await LootClassification.deploy();
 
-    const LootStatsV1 = await ethers.getContractFactory("LootStatsV1");
-    lootStats = await upgrades.deployProxy(
-      LootStatsV1,
-      [lootClassification.address],
-      { kind: "uups" }
-    );
+    const LootStats = await ethers.getContractFactory("LootStats");
+    lootStats = await LootStats.deploy(lootClassification.address);
   });
 
   describe("Stats", function () {
@@ -75,6 +71,40 @@ describe("LootStats", function () {
       expect(await lootStats["getRating(uint256)"](223)).to.equal(166);
     });
 
+    it("Should have the right Count of Mage Items for tokenID 223", async function () {
+      expect(
+        await lootStats["getNumberOfItemsInClass(uint8,uint256)"](2, 223)
+      ).to.equal(3);
+    });
+
+    it("Should have the right Count of Warrior Items for tokenID 223", async function () {
+      expect(
+        await lootStats["getNumberOfItemsInClass(uint8,uint256)"](0, 223)
+      ).to.equal(1);
+    });
+
+    it("Should have the right Count of Hunter Items for tokenID 223", async function () {
+      expect(
+        await lootStats["getNumberOfItemsInClass(uint8,uint256)"](1, 223)
+      ).to.equal(2);
+    });
+
+    it("Should have the right Count of Warrior Items for a GA", async function () {
+      const tokenId = [980, 1631, 1381, 6322, 3555, 5448, 3390, 223];
+
+      expect(
+        await lootStats["getNumberOfItemsInClass(uint8,uint256[8])"](0, tokenId)
+      ).to.equal(6);
+    });
+
+    it("Should have the right Count of Warrior Items for a GA with Lost Items", async function () {
+      const tokenId = [980, 0, 1381, 6322, 3555, 5448, 3390, 223];
+
+      expect(
+        await lootStats["getNumberOfItemsInClass(uint8,uint256[8])"](0, tokenId)
+      ).to.equal(5);
+    });
+
     it("Should have the right Greatness for a GA", async function () {
       const tokenId = [980, 1631, 1381, 6322, 3555, 5448, 3390, 223];
 
@@ -109,17 +139,6 @@ describe("LootStats", function () {
     it("Should have the right Rating for a GA with Lost Mana", async function () {
       const tokenId = [980, 0, 1381, 6322, 3555, 5448, 3390, 223];
       expect(await lootStats["getRating(uint256[8])"](tokenId)).to.equal(394);
-    });
-  });
-
-  describe("Upgradability", function () {
-    beforeEach(async function () {
-      const LootStatsV2 = await ethers.getContractFactory("LootStatsV2");
-      lootStats = await upgrades.upgradeProxy(lootStats.address, LootStatsV2);
-    });
-
-    it("Should have the right Rating for tokenID 1631", async function () {
-      expect(await lootStats["getRating(uint256)"](1631)).to.equal(2240);
     });
   });
 });

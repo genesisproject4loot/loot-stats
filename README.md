@@ -1,4 +1,4 @@
-# LootBagClassification.sol
+# LootStats.sol
 
 This is a Lootverse utility contract to classify Loot (For Adventurers) Bags, mLoot and Genesis Adventurers.
 
@@ -34,7 +34,7 @@ In future ownership of this repository and the latest deployed contract should b
 
 ## How to Use
 
-There are 3 primary stat functions:
+There are 4 primary stat functions for both Bags and Items:
 - getLevel()
 - getGreatness()
 - getRating()
