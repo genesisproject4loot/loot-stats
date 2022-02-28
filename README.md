@@ -1,12 +1,16 @@
 # LootStats.sol
 
-This is a Lootverse utility contract to classify Loot (For Adventurers) Bags, mLoot and Genesis Adventurers.
+This is a Lootverse utility contract to classify Loot Bags, More Loot bags (AKA mLoot), and Genesis Loot bags (AKA Genesis Adventurers).
 
-See the [original Loot Contract](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7) for lists of all possible items.
+Hidden in the original Loot contract, the community has derived a rich set of on-chain [canonical principles & statistics](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system) that give structure and ratings to Loot items and Loot bags.
 
-See [loot.foundation](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system) for an explanation of the classifications used.
+Those statistics work for both items and bags and include: 
+* [Greatness](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system/greatness) 
+* [Levels](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system/item-levels): a 1 (low) to 5 (high) level system for relative item rankings
+* [Ratings](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system): Rating = Greatness x Level
+* [Character Classes](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system/character-classes-specialties): item-level specializations
 
-The contract relies on the [LootClassification](https://github.com/playmint/loot-classification) contract. To make an update to those functions make a PR on that project. The deployer of this contract is responsible for updating to the latest LootClassification contract.
+This contract has a dependency on the [LootClassification](https://github.com/playmint/loot-classification) contract. To make an update to those functions make a PR on that project. The deployer of this contract is responsible for updating to the latest LootClassification contract.
 
 
 ## Intended Use
@@ -17,7 +21,7 @@ The intention is that other Lootverse contracts can directly reference the deplo
 
 ## Upgrades
 
-To ensure that this contract can be upgraded, it is suggested that the address for this contract is a settable variable or in a contract that doesn't have any storage (so it can be easily swapped out).  This will enable the developer to opt-in upgrade as this contract gets updated.
+To ensure that this contract can be upgraded, it is suggested that the address for LootStats is a settable variable.  (Alternatively, if you hardcode this address in a contract, make sure that your contract can be easily upgraded).  This will enable the developer to opt-in upgrade as this contract gets updated.
 
 An example of this could be:
 ```
