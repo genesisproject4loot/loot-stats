@@ -129,4 +129,4 @@ To execute the test suite run:
 
 | Project | Commit | Deployed address link |
 |---------|---------------------|-----------------------|
-| The Genesis Project v2  | [73fda93f2eff3351fb99a29a93c2ad0984b26bb0](https://github.com/genesisproject4loot/loot-stats/tree/73fda93f2eff3351fb99a29a93c2ad0984b26bb0)| [0x886944F49fa10448C573AbF3D5f85f4bd81a7730](https://etherscan.io/address/0x886944F49fa10448C573AbF3D5f85f4bd81a7730) |
+| The Genesis Project v2  | [fcf8e160876ba9b416a4096e7f877908ad8e33a3](https://github.com/genesisproject4loot/loot-stats/tree/fcf8e160876ba9b416a4096e7f877908ad8e33a3)| [0x886944F49fa10448C573AbF3D5f85f4bd81a7730](https://etherscan.io/address/0x886944F49fa10448C573AbF3D5f85f4bd81a7730) |
