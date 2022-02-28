@@ -4,7 +4,7 @@ This is a Lootverse utility contract to classify Loot (For Adventurers) Bags, mL
 
 See the [original Loot Contract](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7) for lists of all possible items.
 
-See [loot.foundation](https://loot.foundation/) for an explanation of the classifications used.
+See [loot.foundation](https://docs.loot.foundation/canonical-principles/loot/loot-classification-and-ratings-system) for an explanation of the classifications used.
 
 The contract relies on the [LootClassification](https://github.com/playmint/loot-classification) contract. To make an update to those functions make a PR on that project. The deployer of this contract is responsible for updating to the latest LootClassification contract.
 
